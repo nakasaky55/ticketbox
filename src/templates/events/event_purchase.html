@@ -1,0 +1,24 @@
+{% extends 'base/index.html' %} {% block title %}
+<title>Purchase</title>
+{% endblock title %} {% block purchase %} {% if event.tickets %}
+<div class="row text-white">
+  <div class="col-12 card">
+    <form
+      method="POST"
+      action="{{url_for('eventbp.event_purchase', id = event.id, action ='purchase')}}"
+    >
+      {% for ticket in event.tickets %}
+      <div class="card-body">
+        <p>{{ticket.id}}</p>
+        <h5 class="card-title">{{ticket.ticket_type}}</h5>
+        <p class="card-text">
+          {{ticket.price}}
+        </p>
+        <input type="number" step="1" name="ticket_{{ticket.id}}" />
+      </div>
+      {% endfor %}
+      <button class="btn btn-danger">Buy</button>
+    </form>
+  </div>
+</div>
+{% endif %} {% endblock purchase %}

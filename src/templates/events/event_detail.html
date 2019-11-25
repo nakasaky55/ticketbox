@@ -1,0 +1,180 @@
+{% extends 'base/index.html' %} {% block event_detail %} {% if
+current_user.username == event.event.username %}
+<div class="jumbotron jumbotron-fluid">
+  <button
+    type="button"
+    class="btn btn-primary"
+    data-toggle="modal"
+    data-target="#editEvent"
+  >
+    Add/Change info
+  </button>
+</div>
+{% endif %}
+<div class="container">
+  <div class="row">
+    <div class="col-12 d-flex justify-content-between">
+      <div class="font-weight-bold">
+        <div
+          class="card text-center"
+          style="width: 10rem; background-color: red;"
+        >
+          <div class="card-header" style=" background-color: red;">
+            {{moment(event.premire_date).format("MMMM")}}
+          </div>
+          <div class="card-body text-dark " style=" background-color: white;">
+            <p class="card-text ">
+              {{moment(event.premire_date).format("DD")}}
+            </p>
+            <hr />
+            <p class="card-text">
+              {{moment(event.premire_date).format("dddd")}}
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="text-white">
+        <h3>
+          {{event.name}} {% if event.state %}
+          <span class="badge badge-success">Opening</span>
+          {% else %}
+          <span class="badge badge-danger">Pending</span>
+          {% endif %}
+        </h3>
+        <p><i class="fas fa-map-marked-alt"></i> {{event.name_address}}</p>
+        <p>
+          <i class="far fa-clock"></i>
+          {{moment(event.premire_date).format('MM-DD-YYYY')}}
+        </p>
+      </div>
+      <div>
+        <a href="{{url_for('eventbp.event_purchase', id=event.id)}}" class="btn btn-danger btn-buy">Buy now</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Button trigger modal -->
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="editEvent"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="editEventLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editEventLabel">Modal title</h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form
+        action="{{url_for('eventbp.event_detail', id = event.id, action ='edit')}}"
+      >
+        <div class="modal-body">
+          <div class="d-flex justify-content-around">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Normal</label>
+              <input
+                required
+                type="number"
+                class="form-control"
+                id="exampleInputEmail1"
+                aria-describedby="emailHelp"
+                placeholder="Enter number of seats"
+                name="normal_ticket"
+              />
+            </div>
+            <div class="form-group">
+              <label for="">Price</label>
+              <input
+                type="number"
+                step="10000"
+                required
+                class="form-control"
+                id="priceNormal"
+                placeholder="Enter price"
+                name="normal_price"
+              />
+            </div>
+          </div>
+          <div class="d-flex justify-content-around">
+            <div class="form-group">
+              <label for="vipTicket">VIP</label>
+              <input
+                required
+                type="number"
+                class="form-control"
+                id="vipTicket"
+                aria-describedby="emailHelp"
+                placeholder="Enter number of seats"
+                name="vip_ticket"
+              />
+            </div>
+            <div class="form-group">
+              <label for="priceVip">Price</label>
+              <input
+                type="number"
+                step="10000"
+                required
+                class="form-control"
+                id="priceVip"
+                placeholder="Enter price"
+                name="vip_price"
+              />
+            </div>
+          </div>
+          <div class="d-flex justify-content-around">
+            <div class="form-group">
+              <label for="vvipTicket">VVIP</label>
+              <input
+                required
+                type="number"
+                class="form-control"
+                id="vvipTicket"
+                aria-describedby="emailHelp"
+                placeholder="Enter number of seats"
+                name="vvip_ticket"
+              />
+            </div>
+            <div class="form-group">
+              <label for="">Price</label>
+              <input
+                type="number"
+                step="10000"
+                required
+                class="form-control"
+                id="priceNormal"
+                placeholder="Enter price"
+                name="vvip_price"
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="switch">
+              <input type="checkbox" name="active" />
+              <span class="slider round"></span>
+            </label>
+            <span>Publish Event</span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            Close
+          </button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock event_detail %}

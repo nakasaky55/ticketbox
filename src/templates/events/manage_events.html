@@ -1,0 +1,205 @@
+{% extends 'base/index.html' %} {% block title %}
+<title>Manage event</title>
+{% endblock title %} {% block manage_events %}
+
+<table class="table text-white">
+  <thead>
+    <tr>
+      <th scope="col">Event Name</th>
+      <th scope="col">Name address</th>
+      <th scope="col">Address</th>
+      <th scope="col">Premire date</th>
+      <th scope="col">Ready to rock ?</th>
+      <th scope="col">Manage event</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for event in events %}
+    <tr>
+      <td><a class="text-white" href="{{url_for('eventbp.event_detail', id=event.id)}}">{{event.name}}</a></td>
+      <td>{{event.name_address}}</td>
+      <td>{{event.address}}</td>
+      <td>{{event.premire_date}}</td>
+      {% if event.state %}
+      <td>Opening</td>
+      {% else %}
+      <td>Pending</td>
+      {% endif %}
+      <td>
+        <button
+          class="btn btn-danger"
+          type="button"
+          class="btn btn-primary"
+          data-toggle="modal"
+          data-target="#pusblishEvent_{{event.id}}"
+        >
+          Publish event
+        </button>
+        <button
+          type="button"
+          class="btn btn-success"
+          data-toggle="modal"
+          data-target="#manageticket_{{event.id}}"
+        >
+          Manage ticket
+        </button>
+      </td>
+    </tr>
+    <div
+      class="modal fade"
+      id="pusblishEvent_{{event.id}}"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="pusblishEventLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editEventLabel">Modal title</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form
+            method="POST"
+            action="{{url_for('eventbp.event_detail', id = event.id, action ='publish_event')}}"
+          >
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="premire_date">Premire date</label>
+                <input
+                  type="date"
+                  name="premire_date"
+                  required
+                  {%
+                  if
+                  event.premire_date
+                  %}
+                  value="{{event.premire_date}}"
+                  {%
+                  endif
+                  %}
+                />
+              </div>
+              <div class="form-group">
+                <label class="switch">
+                  <input
+                    type="checkbox"
+                    name="active"
+                    {%
+                    if
+                    event.state
+                    %}
+                    checked
+                    {%else
+                    %}
+                    {%
+                    endif
+                    %}
+                  />
+                  <span class="slider round"></span>
+                </label>
+                <span>Publish Event</span>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+              <button type="submit" class="btn btn-primary">
+                Save changes
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- ticket modal -->
+    <div
+      class="modal fade"
+      id="manageticket_{{event.id}}"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="pusblishEventLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editTicket">Modal title</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          {% if event.tickets %} {% for ticket in event.tickets %}
+          <div class="d-flex justify-content-around">
+            <p>{{ticket.ticket_type}}</p>
+            <p>{{ticket.price}}</p>
+          </div>
+          {% endfor %} {% endif %}
+          <form
+            method="POST"
+            action="{{url_for('eventbp.event_detail', id = event.id, action ='add_ticket')}}"
+          >
+            <div class="">
+              <div class="form-group">
+                <label for="ticket_type">Ticket type</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="ticket_type"
+                  aria-describedby="emailHelp"
+                  placeholder="Enter type of your ticket"
+                  name="ticket_type"
+                />
+              </div>
+              <div class="form-group">
+                <label for="ticket_price">Ticket price</label>
+                <input
+                  type="text"
+                  step="10000"
+                  class="form-control"
+                  id="ticket_price"
+                  aria-describedby="emailHelp"
+                  placeholder="Enter price"
+                  name="ticket_price"
+                />
+              </div>
+              <div class="form-group">
+                <label for="ticket_quantities">Quantities</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="ticket_quantities"
+                  aria-describedby="emailHelp"
+                  placeholder="Enter price"
+                  name="ticket_quantities"
+                />
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock manage_events %}
